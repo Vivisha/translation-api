@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English to French Translation</title>
+</head>
+<body>
+<div>
+    <h1>English to French Translation</h1>
+    <label for="englishText">Enter English Text:</label><br>
+    <textarea id="englishText" rows="4" cols="50"></textarea><br>
+    <button onclick="translateToFrench()">Translate</button><br>
+    <label for="frenchText">French Text:</label><br>
+    <textarea id="frenchText" rows="4" cols="50" readonly></textarea>
+</div>
+
+<script>
+async function translateToFrench() {
+    var englishText = document.getElementById('englishText').value;
+    
+    if (!englishText) {
+        alert("Please enter English text to translate.");
+        return;
+    }
+    
+    try {
+        const response = await fetch('/translate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text: englishText })
+        });
+        
+        const data = await response.json();
+        document.getElementById('frenchText').value = data.translatedText;
+    } catch (error) {
+        console.error('Translation error:', error);
+        alert("Translation error. Please try again later.");
+    }
+}
+</script>
+
+</body>
+</html>
